@@ -1,0 +1,39 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 327fc5e..68fe7b0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,7 +74,7 @@ if (Emscripten)
+     else (Extern_Config)
+         set(CONFIG_PRELOAD_FILE "--preload-file ../Build_Release/config.xml@config.xml")
+     endif (Extern_Config)
+-    set_target_properties(openclaw PROPERTIES LINK_FLAGS "-s FETCH -s WASM=1 -s BINARYEN_METHOD='native-wasm' -s EXPORTED_FUNCTIONS='[_main]' -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"pcx\",\"png\",\"tga\"]' -s USE_SDL_TTF=2 -s USE_SDL_GFX=2 -s ASYNCIFY=1 -s TOTAL_MEMORY=268435456 ${CONFIG_PRELOAD_FILE} --preload-file ../Build_Release/CLAW.REZ@CLAW.REZ --preload-file ../Build_Release/ASSETS.ZIP@ASSETS.ZIP --preload-file ../Build_Release/console02.tga@console02.tga --preload-file ../Build_Release/clacon.ttf@clacon.ttf")
++    set_target_properties(openclaw PROPERTIES LINK_FLAGS "-s FETCH -s WASM=1 -s BINARYEN_METHOD='native-wasm' -s EXPORTED_FUNCTIONS='[_main]' -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"pcx\",\"png\",\"tga\"]' -s USE_SDL_TTF=2 -s USE_SDL_GFX=2 -s ASYNCIFY=1 -s TOTAL_MEMORY=268435456 ${CONFIG_PRELOAD_FILE} --preload-file ../Build_Release/ASSETS.ZIP@ASSETS.ZIP --preload-file ../Build_Release/console02.tga@console02.tga --preload-file ../Build_Release/clacon.ttf@clacon.ttf")
+ else (Emscripten)
+     list(APPEND TARGET_LIBS
+             SDL2
+diff --git a/OpenClaw/Engine/Audio/Audio.cpp b/OpenClaw/Engine/Audio/Audio.cpp
+index 97c8d19..6d96606 100644
+--- a/OpenClaw/Engine/Audio/Audio.cpp
++++ b/OpenClaw/Engine/Audio/Audio.cpp
+@@ -73,7 +73,7 @@ bool Audio::Initialize(const GameOptions& config)
+     Mix_GroupChannels(0, 15, 1);
+ #else
+     // Mix_ReserveChannels returns nothing.
+-    if (reservedChannels != 0)
++    if (reservedChannels != 0 && reservedChannels != 16)
+     {
+         LOG_ERROR(std::string(Mix_GetError()));
+         return false;
+diff --git a/OpenClaw/Engine/Util/Util.cpp b/OpenClaw/Engine/Util/Util.cpp
+index 98f94d0..6f93263 100644
+--- a/OpenClaw/Engine/Util/Util.cpp
++++ b/OpenClaw/Engine/Util/Util.cpp
+@@ -430,7 +430,7 @@ namespace Util
+         return GetSoundDurationMs(pSound.get());
+     }
+ 
+-#ifndef __EMSCRIPTEN__
++#if 1 // usar el calculo por PCM tambien en web
+     int GetSoundDurationMs(Mix_Chunk* pSound)
+     {
+         uint32 points = 0;
