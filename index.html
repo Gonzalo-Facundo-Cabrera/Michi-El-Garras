@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
 
-    <title>OpenClaw</title>
+    <title>Michi El Garras</title>
     <meta name="description" content="Reimplementation of Captain Claw (1997) platformer">
 
-    <meta property="og:title" content="OpenClaw project">
-    <meta property="og:description" content="OpenClaw open source project">
+    <meta property="og:title" content="Michi El Garras">
+    <meta property="og:description" content="Captain Claw en el navegador, con OpenClaw">
     <!--<meta property="og:image" content="preview.png">-->
 
     <!-- Change default viewport width here according to canvas width -->
@@ -34,52 +34,123 @@
             padding: 0.5em 2em;
         }
     </style>
-	<style>
-   html, body {
-    margin: 0;
-    min-height: 100vh;
-    background: #000;
-    color: #ddd;
-    font-family: system-ui, sans-serif;
-  }
-  body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  canvas { display: block; }
-  a { color: #f5c542; }
-</style>
+    <style>
+        html {
+            background: #000;
+        }
+        html, body {
+            margin: 0;
+            min-height: 100vh;
+            color: #ddd;
+            font-family: system-ui, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: transparent;
+        }
+
+        /* Fondo animado de letras */
+        #bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Encabezado: título | logo | enlaces */
+        .topbar {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 32px;
+            margin: 0;
+        }
+        .titulo {
+            margin: 0;
+            justify-self: start;
+            text-align: left;
+            color: #2bd14f;
+            font-size: 2rem;
+        }
+        .logo {
+            height: 110px;
+            width: auto;
+            display: block;
+            mix-blend-mode: screen; /* hace desaparecer el fondo negro del logo */
+        }
+        .enlaces {
+            justify-self: end;
+        }
+
+        /* Zona del juego: ocupa el resto de la pantalla y lo centra */
+        .juego {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        #canvas {
+            display: block;
+            border: 4px solid #f5c542;
+            border-radius: 6px;
+            box-shadow: 0 0 40px rgba(245,197,66,.35);
+        }
+        a { color: #f5c542; }
+        .cat {
+        height: 90px;     /* ajustá a gusto */
+        width: auto;
+        display: block;
+}
+    </style>
 </head>
 <body>
-<div>
-    <span id="loading"></span>
-    <!-- Config's width and height will be used if canvas does not have this attributes -->
-    <canvas id="canvas" width="640" height="480" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-</div>
-<div>
-    <button onclick="Module.canvas.requestFullscreen()">Enable Fullscreen Mode</button>
-<!--    <button onclick="Console.toggleConsole()">Debug Panel</button> -->
-    <label for="res">Resolution:</label>
-	<select name="res" id="res" onchange="CheatCodeManager.winsize = this.value; CheatCodeManager.resize()">
-		<option value="640 480">640x480</option>
-		<option value="800 600">800x600</option>
-		<option value="1024 768">1024x768</option>
-		<option value="1280 960">1280x960</option>
-		<option value="1600 1200">1600x1200</option>
-		<option value="2000 1500">2000x1500</option>
-	</select>
-	<label for="scale">Scale:</label>
-	<select name="scale" id="scale" onchange="CheatCodeManager.scale = this.value; CheatCodeManager.resize()">
-		<option value="-1">Original</option>
-		<option value="1">1</option>
-		<option value="1.25">1.25</option>
-		<option value="1.5">1.5</option>
-		<option value="2">2</option>
-	</select>
-</div>
+<canvas id="bg"></canvas>
+
+<header class="topbar">
+    <h1 class="titulo">Menú Principal</h1>
+    <img src="assets/logo.webp" alt="Logo Michi El Garras" class="logo">
+    <nav class="enlaces">
+    <img src="assets/cat.webp" alt="Gato" class="cat">
+</nav>
+</header>
+
+<main class="juego">
+    <div>
+        <span id="loading"></span>
+        <!-- Config's width and height will be used if canvas does not have this attributes -->
+        <canvas id="canvas" width="640" height="480" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+    </div>
+    <div>
+        <button onclick="Module.canvas.requestFullscreen()">Enable Fullscreen Mode</button>
+        <!--    <button onclick="Console.toggleConsole()">Debug Panel</button> -->
+        <label for="res">Resolution:</label>
+        <select name="res" id="res" onchange="CheatCodeManager.winsize = this.value; CheatCodeManager.resize()">
+            <option value="640 480">640x480</option>
+            <option value="800 600">800x600</option>
+            <option value="1024 768">1024x768</option>
+            <option value="1280 960">1280x960</option>
+            <option value="1600 1200">1600x1200</option>
+            <option value="2000 1500">2000x1500</option>
+        </select>
+        <label for="scale">Scale:</label>
+        <select name="scale" id="scale" onchange="CheatCodeManager.scale = this.value; CheatCodeManager.resize()">
+            <option value="-1">Original</option>
+            <option value="1">1</option>
+            <option value="1.25">1.25</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+        </select>
+    </div>
+</main>
+
 <div class="debug_panel" style="display:none">
     <div class="cheats">
         <div>
@@ -103,7 +174,46 @@
     <textarea id="console" rows="12"></textarea>
 </div>
 
+<!-- Efecto de letras y símbolos del fondo -->
+<script>
+(function () {
+  var c = document.getElementById('bg'), ctx = c.getContext('2d');
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=<>/\\|{}[]()?!~^;:Ñ';
+  var size = 15, cols, rows, cells;
 
+  function init() {
+    c.width = innerWidth; c.height = innerHeight;
+    cols = Math.ceil(c.width / size);
+    rows = Math.ceil(c.height / size);
+    cells = [];
+    for (var i = 0; i < cols * rows; i++) cells.push({ a: 0, d: 0, ch: '' });
+  }
+
+  function tick() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.font = size + 'px monospace';
+    for (var i = 0; i < cells.length; i++) {
+      var s = cells[i];
+      if (s.a <= 0 && Math.random() < 0.0005) {      // aparece (bajá el número para menos letras)
+        s.ch = chars[Math.floor(Math.random() * chars.length)];
+        s.d = 1; s.a = 0.01;
+      }
+      if (s.a > 0) {
+        s.a += s.d * 0.0005;                           // velocidad (bajá para ir más lento)
+        if (s.a >= 0.3) s.d = -1;
+        if (s.a <= 0) { s.a = 0; s.d = 0; continue; }
+        ctx.fillStyle = 'rgba(0,255,70,' + s.a + ')';
+        ctx.fillText(s.ch, (i % cols) * size, Math.floor(i / cols) * size + size);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  addEventListener('resize', init);
+  init(); tick();
+})();
+</script>
 <script type='text/javascript'>
     var CheatCodeManager = {
         jumps: false,
@@ -118,7 +228,7 @@
                     'keyCode': key,
                     'charCode': key,
                     'view': window,
-                    'bubbles': true,
+                    'bubbles': t  e,
                     'cancelable': true
                 }));
         },
@@ -160,7 +270,7 @@
         },
         resize: function () {
             CheatCodeManager.write("WINRESIZE " + CheatCodeManager.winsize + " " + CheatCodeManager.scale, Module.canvas);
-            
+
             var width = parseInt(CheatCodeManager.winsize.split(" ")[0]);
             var height = parseInt(CheatCodeManager.winsize.split(" ")[1]);
             var scale = parseFloat(CheatCodeManager.scale);
@@ -276,23 +386,23 @@
         var r = document.getElementsByTagName("script")[0];
         r.parentNode.insertBefore(script, r);
     }
-    
+
     if (window.localStorage.width && window.localStorage.height && window.localStorage.scale) {
         document.getElementById('res').value = window.localStorage.width + " " + window.localStorage.height;
         document.getElementById('scale').value = window.localStorage.scale;
-        
+
         CheatCodeManager.winsize = window.localStorage.width + " " + window.localStorage.height;
         CheatCodeManager.scale = window.localStorage.scale;
     }
-    
+
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
         //document.getElementById('viewport').width = "100%"
 //        document.getElementById('canvas').width = "640"
 //        document.getElementById('canvas').height = "480"
     }
-    
+
 //    console.log("CW: " + document.getElementById('canvas').width + ", CH: " + document.getElementById('canvas').height);
-	
+
     loadGame();
 </script>
 </body>
